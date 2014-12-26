@@ -1,0 +1,29 @@
+to do list for terminal-Backgammon project:
+	initBoard() # I'm thinking returns a dictionary.
+	printBoard(Board) # see below
+	rollDice() # returns total number of moves, prints "you rolled a X and a Y, giving you Z total moves."
+	makeMove(Xoard, side, pos, numSteps)
+	main() does input/output, calls functions.
+	# Once that's all done:
+	makeMove(board, player) # AI to figure out a good move. game tree?
+
+
+idea for board representation:
+							X HOME BOARD
+ -------------------------------------------------
+|1   2   3   4   5   6  | | 7   8   9   10  11  12|
+|O               X      | | X                   O |
+|O               X      | | X                   O |
+|O               X      | | X                     |
+|O                      | | X                     |
+|O                      | | X                     |
+ -------------------------------------------------
+|X                      | | O                     |
+|X                      | | O                     |
+|X               O      | | O                     |
+|X               O      | | O                   X |
+|X               O      | | O                   X |
+|^   ^   ^   ^   ^   ^  | | ^   ^   ^   ^   ^   ^ |
+|13  14  15  16  17  18 | | 19  20  21  22  23  24|
+ -------------------------------------------------
+ 							O HOME BOARD
