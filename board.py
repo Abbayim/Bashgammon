@@ -11,8 +11,7 @@ class Board:
 		self.myBoard[16] = 3
 		self.myBoard[18] = 5
 		self.myBoard[23] = -2
-		self.maxtop = 5
-		self.maxbottom = 5
+		self.maxRows = 5
 		self.xFree = 0
 		self.oFree = 0
 		self.xJail = 0
@@ -71,6 +70,10 @@ class Board:
 					self.myBoard[newSpace] = self.myBoard[newSpace] - 1
 					if (newSpace < 6):
 						self.xHome = self.xHome + 1
+					if (newSpace < 11):
+						self.updateRows(True)
+					else:
+						self.updateRows(False)
 					return (True, "Move made")
 		else:
 			if (self.oJail > 0 and (steps != 0 or space > 5)):
@@ -113,8 +116,26 @@ class Board:
 					self.myBoard[newSpace] = self.myBoard[newSpace] + 1
 					if (newSpace > 17):
 						self.oHome = self.oHome + 1
+					if (newSpace < 11):
+						self.updateRows(True)
+					else:
+						self.updateRows(False)
 					return (True, "Move made")
 				
+	def updateRows(self, top):
+		changed = False
+		if top:
+			for i in range(12):
+				if (self.myBoard[i] > 5):
+					self.maxRows = self.myBoard[i]
+					changed = True
+		else:
+			for i in range(23,11,-1):
+				if (self.myBoard[i] > 5):
+					self.maxRows = self.myBoard[i]
+					changed = True
+		if not changed:
+			self.maxRows = 5
 
 
 	def __repr__(self):
@@ -145,10 +166,10 @@ class Board:
 			boardstring = "				X HOME BOARD 	Freed:" + str(self.xFree) + "\n"
 		boardstring += " -------------------------------------------------\n"
 		boardstring += "|12  11  10  9   8   7  | | 6   5   4   3   2   1 |\n"
-		for i in range(self.maxtop):
+		for i in range(self.maxRows):
 			boardstring += self.populateTop(i)
 		boardstring += " ------------------------------------------------- \n"
-		for i in range(self.maxbottom-1,-1,-1):
+		for i in range(self.maxRows-1,-1,-1):
 			boardstring += self.populateBottom(i)
 		boardstring += "|13  14  15  16  17  18 | | 19  20  21  22  23  24|\n"
 		boardstring += " -------------------------------------------------\n"
@@ -174,7 +195,7 @@ class Board:
 		12 -> 48
 		"""
 		line = "|                       | |                       |\n"
-		boardtostring = {}
+		boardtostring = {} 
 		boardtostring[0] = 48
 		boardtostring[1] = 44
 		boardtostring[2] = 40
