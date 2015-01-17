@@ -2,11 +2,14 @@ from board import Board
 import random
 import sys
 
-	
+#todo: jail rolls
+#todo: can't split dice rolls
+#todo: make sure the "done" thing works
+exitTerms = ("quit", "exit", "bye","q")
 def main():
 	b = Board()
 	intro = open('readme.txt', 'r')
-	exitTerms = ("quit", "exit", "bye")
+	
 	SIDE = True #True if X, false if O
 	for line in intro:
 		print(line)
@@ -32,17 +35,44 @@ def main():
 			while (not turnComplete and line not in exitTerms and total > 0):
 				line = input()
 				space,steps = parseInput(line)
+				jailFreed = False
+				jailCase = False
+				if (SIDE and b.xJail > 0):
+					jailCase = True
+				if (not SIDE and b.oJail > 0):
+					jailCase = True
 				if (space == 100 and steps == 100):
 					total = 0
 					break
+				if (space == 101 and steps == 101):
+					break
+				if (steps != roll1 and steps != roll2 and steps != (roll1 + roll2) and steps != 100 and not jailCase):
+					print("You didn't roll that!")
+					continue
+					# Must jump to beginning of loop
 				space = space - 1
+				if (steps == 0 and SIDE and b.xJail > 0):
+					tempSteps = space - 18
+					if (tempSteps != roll1 and tempSteps != roll2):
+						print("You didn't roll that!")
+						continue
+					else:
+						jailFreed = True
+				elif (steps == 0 and not SIDE and b.oJail > 0):
+					tempSteps = space + 1
+					if (tempSteps != roll1 and tempSteps != roll2):
+						print("You didn't roll that!")
+						continue
+					else:
+						jailFreed = True
 				if (space < 0 or space > 23 or steps < 0):
 					print("That move is not allowed.  Please try again.")
-					line = input()
-				# if SIDE:
-				# 	steps = steps * -1
+					continue
+					#Same deal here.
 				move, response = b.makeMove(space, SIDE, steps)
 				print(response)
+				if (move and jailFreed):
+					steps = tempSteps
 				if move:
 					total = total - steps
 					print(b)
@@ -54,6 +84,8 @@ def main():
 def parseInput(response):
 	if response == "d" or response == "f" or response == "done" or response == "finish":
 		return(100,100)
+	if response in exitTerms:
+		return (101, 101)
 	# if type(response) == type("Sample string"):
 	# 	return(101,101)
 	loc = findSeparation(response)
