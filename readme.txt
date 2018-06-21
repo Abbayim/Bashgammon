@@ -40,6 +40,3 @@ Currently, you can only play player vs. player.  An update will come that will a
 
 Have fun!
 
-I don't know if I have to include any licensing or whatever, so I'm just not going to until somebody tells me otherwise.
-
-
